@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+
+    </appender>
+
+    <appender name="CONSOLE" class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
+
+        <appender class="ch.qos.logback.core.ConsoleAppender">
+
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <timestampPattern>yyyy-MM-dd HH:mm:ss</timestampPattern>
+                <timeZone>UTC</timeZone>
+                <jsonFactoryDecorator class="br.com.thome.hebert.config.CustomJsonFactoryDecorator" />
+            </encoder>
+
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+
+                <!-- <springProfile name="local">
+          <jsonGeneratorDecorator class="br.com.thome.hebert.config.PrettyPrintingJsonGeneratorDecorator"/>
+        </springProfile> -->
+
+                <jsonFactoryDecorator class="br.com.thome.hebert.config.CustomJsonFactoryDecorator" />
+
+                <providers >
+                    <timestamp/>
+                    <logLevel/>
+                    <nestedField>
+                        <fieldName>data</fieldName>
+                        <providers>
+                            <message/>
+                            <context/>
+                            <tags/>
+                            <arguments/>
+                            <logstashMarkers/>
+                        </providers>
+                    </nestedField>
+                    <loggerName/>
+                    <provider class="br.com.thome.hebert.config.CustomStackTraceJsonProvider">
+                        <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                            <maxLength>2048</maxLength>
+                            <!-- <shortenedClassNameLength>20</shortenedClassNameLength> -->
+                            <exclude>^sun\.reflect\..*\.invoke</exclude>
+                            <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                            <rootCauseFirst>true</rootCauseFirst>
+                        </throwableConverter>
+                    </provider>
+                    <mdc/>
+                </providers>
+
+            </encoder>
+
+        </appender>
+    </appender>
+
+    <springProfile name="stg,prd,prd2,dev">
+        <logger name="br.com.thome.hebert" level="INFO" additivity="true"/>
+        <logger name="io.lettuce.core.protocol" level="INFO" additivity="true"/>
+        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" additivity="true"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <springProfile name="local">
+        <logger name="br.com.thome.hebert" level="DEBUG" additivity="true"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+</configuration>

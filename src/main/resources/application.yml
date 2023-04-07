@@ -1,0 +1,57 @@
+debug: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+  metrics:
+    export:
+      atlas:
+        enabled: false
+  server:
+    port: ${MANAGEMENT_PORT:8080}
+  endpoint:
+    health:
+      show-details: always
+
+grpc:
+  server:
+    port: 9090
+
+info:
+  app:
+    name: contract
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 6000
+      validation-timeout: 2000
+      maximum-pool-size: 10
+      minimum-idle: 5
+    url: jdbc:postgresql://${DATABASE_ADDRESS}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  redis:
+    cluster:
+      master:
+        host: ${REDIS_MASTER_HOST}
+        port: ${REDIS_MASTER_PORT}
+      replica:
+        host: ${REDIS_REPLICA_HOST}
+        port: ${REDIS_REPLICA_PORT}
+    password: ${REDIS_PASSWORD}
+    timeout: 2000
+    lettuce:
+      pool:
+        Max active: 8
+        Max idle: 8
+        Min idle: 1
+        Max wait: 100ms
+  liquibase:
+    enabled: false
+  main:
+    banner-mode: "off"

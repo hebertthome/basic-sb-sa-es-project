@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202304071710-client_event
+      author: hebertsantos
+      changes:
+        - createTable:
+            tableName: client_event
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: uuid
+              - column:
+                  constraints:
+                    nullable: false
+                  name: event_type
+                  type: varchar(60)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: client_id
+                  type: varchar(36)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: payload
+                  type: varchar(4000)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: occurrenced_dt
+                  type: timestamp with time zone
+              - column:
+                  constraints:
+                    nullable: false
+                  name: persisted_dt
+                  type: timestamp with time zone
+        - createIndex:
+            indexName: idx_client_client_id
+            tableName: client_event
+            columns:
+              - column:
+                  name: client_id
+                  type: varchar(36)
+        - createIndex:
+            indexName: idx_client_client_id_type
+            tableName: client_event
+            columns:
+              - column:
+                  name: client_id
+                  type: varchar(36)
+              - column:
+                  name: event_type
+                  type: varchar(60)

@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202304071709-contract_event
+      author: hebertsantos
+      changes:
+        - createTable:
+            tableName: contract_event
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: uuid
+              - column:
+                  constraints:
+                    nullable: false
+                  name: event_type
+                  type: varchar(60)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: contract_id
+                  type: varchar(36)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: payload
+                  type: varchar(4000)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: occurrenced_dt
+                  type: timestamp with time zone
+              - column:
+                  constraints:
+                    nullable: false
+                  name: persisted_dt
+                  type: timestamp with time zone
+        - createIndex:
+            indexName: idx_contract_contract_id
+            tableName: contract_event
+            columns:
+              - column:
+                  name: contract_id
+                  type: varchar(36)
+        - createIndex:
+            indexName: idx_contract_contract_id_type
+            tableName: contract_event
+            columns:
+              - column:
+                  name: contract_id
+                  type: varchar(36)
+              - column:
+                  name: event_type
+                  type: varchar(60)

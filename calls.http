@@ -1,0 +1,23 @@
+@protocol = http
+@hostname = localhost
+@port = 8080
+@host = {{protocol}}://{{hostname}}:{{port}}
+@contentTypeJson = application/json
+
+###     CREATE CONTRACT
+
+@accountID = 
+
+POST {{host}}/api/v1/contract
+Content-Type: {{contentTypeJson}}
+
+{                                                
+  "product_ids": [
+    "product_1"
+  ],
+  "additional_information": {
+    "field1": "field1",
+    "field2": "field2 TIM"
+  }
+}
+
